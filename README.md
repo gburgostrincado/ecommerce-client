@@ -1,54 +1,106 @@
-# React + TypeScript + Vite
+# E-Commerce Frontend React con Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Descripción
 
-Currently, two official plugins are available:
+Este proyecto es el frontend para una aplicación de comercio electrónico desarrollada con React y Vite. La aplicación permite a los usuarios ver productos, agregarlos al carrito de compras, realizar pagos mediante Stripe y gestionar reembolsos de sus órdenes.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tecnologías
 
-## Expanding the ESLint configuration
+- **React**: Biblioteca para construir interfaces de usuario
+- **Vite**: Herramienta de construcción y desarrollo
+- **React Router**: Navegación entre páginas
+- **Axios**: Cliente HTTP para realizar peticiones a la API
+- **Stripe API**: Integración con el SDK de Stripe para pagos
+- **Zustand**: Gestión de estado de la API y caché
+- **Bootstrap CSS**: Framework de CSS para estilos (opcional)
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Requisitos previos
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+- Node.js (v20 o superior)
+- Backend API configurado y ejecutándose
+- Cuenta de Stripe para las pruebas de pago
+
+## Instalación
+
+1. Clonar el repositorio:
+   ```bash
+   git clone <url-del-repositorio>
+   cd frontend
+   ```
+
+2. Instalar dependencias:
+   ```bash
+   npm install
+   ```
+
+3. Configurar variables de entorno:
+   - Crear un archivo `.env` en la raíz del proyecto
+   ```
+   API_URL=http://localhost:4000/api/v1
+   REACT_APP_STRIPE_PUBLIC_KEY=pk_test_...
+   ```
+
+## Características principales
+
+### Vista de productos
+- Listado de productos con imagen, nombre, descripción y precio
+- Vista detallada de cada producto
+
+### Carrito de compras
+- Añadir productos al carrito
+- Eliminar productos del carrito
+- Persistencia del carrito en localStorage
+
+### Proceso de pago
+- Integración con Stripe para el procesamiento de pagos
+- Página de checkout con resumen de compra
+- Redirección a la página de éxito tras completar el pago
+
+### Gestión de órdenes
+- Visualización de historial de órdenes
+- Detalle de cada orden con sus productos
+- Solicitud de reembolsos totales o parciales
+
+## Scripts disponibles
+
+- `npm run dev`: Inicia el servidor de desarrollo de Vite
+- `npm run build`: Compila la aplicación para producción
+
+## Ejecución en desarrollo
+
+Para iniciar el servidor de desarrollo:
+
+```bash
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+La aplicación estará disponible en `http://localhost:5173`
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Integración con Stripe
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+Para la integración con Stripe:
+
+1. Se utiliza el componente `Elements` de Stripe
+2. Para el checkout se implementa `redirectToCheckout` con la sessionId proporcionada por el backend
+3. Para la confirmación de pago se utiliza el webhook configurado en el backend
+
+## Despliegue
+
+Para construir la aplicación para producción:
+
+```bash
+npm run build
 ```
+
+Esto generará una carpeta `dist` con los archivos estáticos que pueden ser desplegados en cualquier servicio de hosting como Netlify, Vercel, o un servidor propio.
+
+## Notas importantes
+
+- Asegúrate de que el backend esté en ejecución antes de iniciar el frontend
+- Para pruebas de pago, utiliza las tarjetas de prueba proporcionadas por Stripe:
+  - Ejemplo: 
+    - numero: 4242424242424242
+    - CVC: 3 dígitos al azar
+    - Fecha: Cualquier fecha futura
+
+- Configura correctamente las URLs de redirección en el backend para el flujo de pago
