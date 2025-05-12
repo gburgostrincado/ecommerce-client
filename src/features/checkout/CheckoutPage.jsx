@@ -8,7 +8,7 @@ import ProductItem from "../../components/ProductItem";
 import CheckoutForm from "./components/CheckoutForm";
 import useCheckoutStore from "./checkoutStore";
 
-const stripePromise = loadStripe("pk_test_51RMemMR3MftjHKGucNLLcmEPTYV0vIcGzlWut79L6uP4RYkqisrs1QELMXBlFkYM8kseKFuQtAnDo0v1XIDFqFIg00LidolgX2");
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const CheckoutPage = () => {
   const { cart, getCartTotal, clearCart } = useCartStore();
