@@ -11,6 +11,7 @@ const SuccessPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!cart || order) return;
     const saveOrder = async () => {
       const respose = await axios.post(`${process.env.API_URL}/orders`, { cart, client });
 
