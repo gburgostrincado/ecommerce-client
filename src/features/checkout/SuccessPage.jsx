@@ -12,7 +12,7 @@ const SuccessPage = () => {
 
   useEffect(() => {
     const saveOrder = async () => {
-      const respose = await axios.post("http://localhost:5002/api/v1/orders", { cart, client });
+      const respose = await axios.post(`${process.env.API_URL}/orders`, { cart, client });
 
       if (respose.status !== 201) {
         console.error("Error al guardar la orden");

@@ -10,7 +10,7 @@ const useProductStore = create((set, get) => ({
     if (get().products.length > 0) return;
     set({ loading: true, error: null });
     try {
-      const res = await axios.get('http://localhost:5002/api/v1/products');
+      const res = await axios.get(`${process.env.API_URL}/products`);
       set({ products: res.data, loading: false });
     } catch (error) {
       set({ error: 'Error fetching products', loading: false });

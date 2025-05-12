@@ -9,7 +9,7 @@ const ProductDetail = () => {
     const fetchProduct = async () => {
       const productId = window.location.pathname.split('/').pop();
       try {
-        const response = await fetch(`http://localhost:5002/api/v1/products/${productId}`);
+        const response = await fetch(`${process.env.API_URL}/products/${productId}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }

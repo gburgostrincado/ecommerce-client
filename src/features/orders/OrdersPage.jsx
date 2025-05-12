@@ -27,7 +27,7 @@ const OrdersPage = () => {
   const handleRefund = async (orderId, amount) => {
     setLoadingRefund(orderId);
     try {
-      const response = await axios.post(`http://localhost:5002/api/v1/orders/${orderId}/refund`, {
+      const response = await axios.post(`${process.env.API_URL}/orders/${orderId}/refund`, {
         amount: amount || undefined,
       });
 

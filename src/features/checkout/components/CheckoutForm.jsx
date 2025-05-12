@@ -23,7 +23,7 @@ const CheckoutForm = ({ cart, client, addClient }) => {
     setLoading(true);
 
     try {
-      const { data } = await axios.post("http://localhost:5002/api/v1/payment", { cart, client });
+      const { data } = await axios.post(`${process.env.API_URL}/payment`, { cart, client });
       const { clientSecret } = data;
 
       const result = await stripe.confirmCardPayment(clientSecret, {
