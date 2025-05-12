@@ -51,7 +51,7 @@ const OrdersPage = () => {
       {orders.length === 0 ? (
         <p>No hay órdenes aún.</p>
       ) : (
-        orders.map((order) => (
+        orders.sort((a, b) => b.id - a.id).map((order) => (
           <div key={order.id} className="card mb-4">
             <div className="card-header d-flex justify-content-between align-items-center">
               <div>
