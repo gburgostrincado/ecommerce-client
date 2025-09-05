@@ -11,7 +11,7 @@ const SuccessPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!cart || order) return;
+    // if (!cart || order) return;
     const saveOrder = async () => {
       const respose = await axios.post(`${process.env.API_URL}/orders`, { cart, client });
 
@@ -30,7 +30,7 @@ const SuccessPage = () => {
     } else {
       navigate('/');
     }
-  }, [cart, clearCart, navigate]);
+  }, []);
 
   const getTotal = () =>
     cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);

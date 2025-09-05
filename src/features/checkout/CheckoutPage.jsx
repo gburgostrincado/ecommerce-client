@@ -35,9 +35,11 @@ const CheckoutPage = () => {
               <h2>Información de pago</h2>
             </div>
           </div>
-          <Elements stripe={stripePromise}>
+          {/* <Elements stripe={stripePromise}>
             <CheckoutForm cart={cart} clearCart={clearCart} client={client} addClient={addClient} />
-          </Elements>
+          </Elements> */}
+          
+          <CheckoutForm cart={cart} clearCart={clearCart} client={client} addClient={addClient} />
         </div>
       </div>
     </div>

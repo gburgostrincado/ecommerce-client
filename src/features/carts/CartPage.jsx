@@ -36,7 +36,7 @@ const CartPage = () => {
             </div>
             <hr />
             <NavLink to="/checkout" className="btn btn-dark w-100 mb-2 text-uppercase">
-                Ir a pagar
+                Ir a Checkout
             </NavLink>
           </div>
         </div>

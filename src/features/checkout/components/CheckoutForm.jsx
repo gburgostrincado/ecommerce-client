@@ -6,52 +6,68 @@ import {
 import { use, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import useCartStore from "../../carts/cartStore";
 
 const CheckoutForm = ({ cart, client, addClient }) => {
-  const stripe = useStripe();
+  // const stripe = useStripe();
   const navigate = useNavigate();
-  const elements = useElements();
+  // const elements = useElements();
   const [loading, setLoading] = useState(false);
+  const { clearCart } = useCartStore();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     addClient(name, value);
   }
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const { data } = await axios.post(`${process.env.API_URL}/payment`, { cart, client });
-      const { clientSecret } = data;
-
-      const result = await stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: elements.getElement(CardElement),
-          billing_details: {
-            name: client.name,
-            email: client.email,
-          },
-        },
-      });
-
-      console.log(result);
-      if (result.error) {
-        navigate("/payment/cancel");
-        setLoading(false);
-      } else if (result.paymentIntent.status === "succeeded") {
-        // clearCart();
-        navigate("/payment/success");
-        setLoading(false);
-      }
-      
+      // const { data } = await axios.post(`${process.env.API_URL}/payment`, { cart, client });
+      // clearCart();
+      navigate("/payment/success");
     } catch (error) { 
       console.error("Error al procesar el pago:", error);
       navigate("/payment/cancel");
       setLoading(false);
     }
-  };
+  }
+
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+
+  //   try {
+  //     const { data } = await axios.post(`${process.env.API_URL}/payment`, { cart, client });
+  //     const { clientSecret } = data;
+
+  //     const result = await stripe.confirmCardPayment(clientSecret, {
+  //       payment_method: {
+  //         card: elements.getElement(CardElement),
+  //         billing_details: {
+  //           name: client.name,
+  //           email: client.email,
+  //         },
+  //       },
+  //     });
+
+  //     console.log(result);
+  //     if (result.error) {
+  //       navigate("/payment/cancel");
+  //       setLoading(false);
+  //     } else if (result.paymentIntent.status === "succeeded") {
+  //       // clearCart();
+  //       navigate("/payment/success");
+  //       setLoading(false);
+  //     }
+      
+  //   } catch (error) { 
+  //     console.error("Error al procesar el pago:", error);
+  //     navigate("/payment/cancel");
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <form onSubmit={handleSubmit} className="checkout-form">
@@ -80,9 +96,9 @@ const CheckoutForm = ({ cart, client, addClient }) => {
       </div>
 
       <label>Información de la tarjeta</label>
-      <CardElement options={{ style: { base: { fontSize: "16px" } } }} />
+      {/* <CardElement options={{ style: { base: { fontSize: "16px" } } }} /> */}
       
-      <button className="btn btn-primary mt-3 w-100" type="submit" disabled={!stripe || loading}>
+      <button className="btn btn-primary mt-3 w-100" type="submit">
         {loading ? "Procesando..." : "Pagar"}
       </button>
     </form>
