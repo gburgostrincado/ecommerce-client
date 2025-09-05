@@ -1,28 +1,76 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useProductStore  from "./productStore";
 import './product.css';
 import { NavLink } from "react-router";
+import ModalProduct from "../../components/ModalProduct";
 
 
 const ProductPage = () => {
-  const products = useProductStore(state => state.products);
-  const fetchProducts = useProductStore(state => state.fetchProducts);
+  const { products, fetchProducts, addProduct, isModalOpen, setIsModalOpen, loading } = useProductStore();
+
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    price: '',
+    stock: '',
+    imageUrl: ''
+  });
 
   useEffect(() => {
     fetchProducts();
   }, []);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if(!formData.name || !formData.price) {
+      alert('Nombre y precio son obligatorios');
+      return;
+    }
+
+    addProduct({
+      ...formData,
+      price: parseFloat(formData.price),
+      stock: parseInt(formData.stock || 0)
+    });
+  
+    setFormData({
+      name: '',
+      description: '',
+      price: '',
+      stock: '',
+      imageUrl: ''
+    });
+  };
+
   return (
     <div className="product-page container mt-5">
-      <h1>Productos</h1>
+      <div className="d-flex align-items-center mb-4">
+        <h1>Productos</h1>
+        <button className="btn btn-outline-primary m-2" onClick={() => setIsModalOpen(true)}>
+          Crear producto
+        </button>
+      </div>
       <div className="container">
         <div className="row">
-          {products.map(product => (
-            <div className="col-6 col-md-4 col-lg-3 mb-4" key={product.id}>
-              <NavLink
-                to={`/products/${product.id}`}
-                className="nav-link text-decoration-none"
-              >
+          {loading ? (
+            <div className="col-12 text-center">
+              <div className="spinner-border" role="status">
+                <span className="visually-hidden">Cargando...</span>
+              </div>
+            </div>
+          ) : (
+            products.map(product => (
+              <div className="col-6 col-md-4 col-lg-3 mb-4" key={product.id}>
+                <NavLink
+                  to={`/products/${product.id}`}
+                  className="nav-link text-decoration-none"
+                >
                 <div className="product-tile">
                   <div className="image-container">
                     <img
@@ -43,9 +91,20 @@ const ProductPage = () => {
                 </div>
                 </NavLink>
               </div>
-          ))}
+          )))}
         </div>
       </div>
+      {console.log("Loading state:", loading)}
+
+      {isModalOpen && (
+        <ModalProduct
+          handleChange={handleChange}
+          formData={formData}
+          setIsModalOpen={setIsModalOpen}
+          handleSubmit={handleSubmit}
+          loading={loading}
+        />
+      )}
     </div>
   );
 }
