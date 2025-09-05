@@ -14,7 +14,7 @@ const ProductDetail = () => {
     stock: "",
     imageUrl: ""
   });
-  const { addToCart } = useCartStore();
+  const { addToCart, cart } = useCartStore();
   const { updateProduct, deleteProduct, isModalOpen, setIsModalOpen, loading } = useProductStore();
 
   useEffect(() => {
@@ -152,7 +152,7 @@ const ProductDetail = () => {
           <div className="d-grid gap-2 mb-4">
             <button
               className="btn btn-danger btn-lg"
-              disabled={product?.stock <= 0}
+              disabled={product?.stock <= 0 || cart.some(item => item.id === product.id && item.quantity >= product.stock)}
               onClick={() => addToCart(product)}
             >
               Añadir al carrito
