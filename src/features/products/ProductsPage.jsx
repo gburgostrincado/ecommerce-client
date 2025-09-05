@@ -83,6 +83,14 @@ const ProductPage = () => {
                         borderRadius: '4px'
                       }}
                     />
+                    {product.stock === 0 && (
+                      <span
+                        className="badge bg-danger position-absolute top-0 start-0 m-2"
+                        style={{ fontSize: '0.75rem', borderRadius: '12px' }}
+                      >
+                        AGOTADO
+                      </span>
+                    )}
                   </div>
                   <div className="pt-2">
                     <p className="mb-1" style={{ fontWeight: '500' }}>{product.name}</p>
