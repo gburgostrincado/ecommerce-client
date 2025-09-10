@@ -3,6 +3,7 @@ import useCartStore from '../carts/cartStore';
 import useProductStore from './productStore';
 import ModalProduct from '../../components/ModalProduct';
 import { useNavigate } from 'react-router';
+import './product.css'; // Asegúrate de agregar los estilos de animación aquí
 
 const ProductDetail = () => {
   const navigate = useNavigate();
@@ -14,6 +15,8 @@ const ProductDetail = () => {
     stock: "",
     imageUrl: ""
   });
+  const [addedToCart, setAddedToCart] = useState(false);
+
   const { addToCart, cart } = useCartStore();
   const { updateProduct, deleteProduct, isModalOpen, setIsModalOpen, loading } = useProductStore();
 
@@ -22,9 +25,7 @@ const ProductDetail = () => {
       const productId = window.location.pathname.split('/').pop();
       try {
         const response = await fetch(`${process.env.API_URL}/products/${productId}`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
+        if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         setProduct(data);
       } catch (error) {
@@ -83,7 +84,13 @@ const ProductDetail = () => {
       console.error("Error al eliminar producto:", error);
       alert("No se pudo eliminar el producto");
     }
-  }
+  };
+
+  const handleAddToCart = () => {
+    addToCart(product);
+    setAddedToCart(true);
+    setTimeout(() => setAddedToCart(false), 1500);
+  };
 
   return (
     <div className="container py-5">
@@ -132,11 +139,9 @@ const ProductDetail = () => {
             </div>
           </div>
           <p className="text-muted mb-2">SKU #{product?.id}</p>
-
           <div className="mb-4">
             <span className="h4 bold text-success">${product?.price?.toLocaleString()}</span>
           </div>
-
           <p className="mb-4">{product?.description}</p>
 
           {/* Stock */}
@@ -149,11 +154,11 @@ const ProductDetail = () => {
           </div>
 
           {/* Botón de compra */}
-          <div className="d-grid gap-2 mb-4">
+          <div className="d-grid gap-2 mb-4 position-relative">
             <button
-              className="btn btn-danger btn-lg"
+              className={`btn btn-danger btn-lg ${addedToCart ? 'btn-added' : ''}`}
               disabled={product?.stock <= 0 || cart.some(item => item.id === product.id && item.quantity >= product.stock)}
-              onClick={() => addToCart(product)}
+              onClick={handleAddToCart}
             >
               Añadir al carrito
             </button>
@@ -177,5 +182,6 @@ const ProductDetail = () => {
       }
     </div>
   );
-} 
+};
+
 export default ProductDetail;

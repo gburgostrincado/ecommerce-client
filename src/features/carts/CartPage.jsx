@@ -3,7 +3,7 @@ import { NavLink } from 'react-router';
 import ProductItem from '../../components/ProductItem';
 
 const CartPage = () => {
-  const { cart, removeFromCart, getCartTotal } = useCartStore();
+  const { cart, removeFromCart, getCartTotal, updateQuantity } = useCartStore();
 
   if (cart.length === 0) {
     return <p className="text-center mt-4">Tu carrito está vacío</p>;
@@ -20,6 +20,7 @@ const CartPage = () => {
               key={product.id}
               product={product}
               removeFromCart={removeFromCart}
+              updateQuantity={updateQuantity}
             />
           ))}
         </div>

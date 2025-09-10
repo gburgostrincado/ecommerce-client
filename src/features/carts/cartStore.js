@@ -24,7 +24,15 @@ const useCartStore = create(
       })),
       clearCart: () => set({ cart: [] }),
       getCartTotal: () => get().cart.reduce((total, item) => total + item.price * item.quantity, 0),
-      getCartCount: () => get().cart.reduce((count, item) => count + item.quantity, 0)
+      getCartCount: () => get().cart.reduce((count, item) => count + item.quantity, 0),
+      updateQuantity: (productId, newQuantity) =>
+        set((state) => ({
+          cart: state.cart.map((item) =>
+            item.id === productId
+              ? { ...item, quantity: newQuantity > 0 ? newQuantity : 1 }
+              : item
+          ),
+        })),
     }),
     {
       name: 'cart-storage', // unique name

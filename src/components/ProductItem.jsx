@@ -1,6 +1,23 @@
-const ProductItem = ({ product, checkout=false, removeFromCart, orderDetail }) => {
-  const quantity = orderDetail ? orderDetail.quantity : product.quantity;
+import { useState } from "react";
+
+const ProductItem = ({ product, checkout=false, removeFromCart, orderDetail, updateQuantity }) => {
+  const initialQuantity = orderDetail ? orderDetail.quantity : product.quantity;
   const price = orderDetail ? orderDetail.price : product.price;
+
+  const [quantity, setQuantity] = useState(initialQuantity);
+
+  const handleIncrease = () => {
+    const newQty = quantity + 1;
+    setQuantity(newQty);
+    updateQuantity && updateQuantity(product.id, newQty);
+  };
+
+  const handleDecrease = () => {
+    if (quantity <= 1) return;
+    const newQty = quantity - 1;
+    setQuantity(newQty);
+    updateQuantity && updateQuantity(product.id, newQty);
+  };
 
   return (
     <div key={product.id} className="d-flex align-items-center border-bottom py-3">
@@ -12,9 +29,27 @@ const ProductItem = ({ product, checkout=false, removeFromCart, orderDetail }) =
       />
       <div className="flex-grow-1">
         <h6 className="mb-1 fw-bold">{product.name}</h6>
-        <span>
-          x{quantity}
-        </span>
+        <div className="d-flex align-items-center">
+          {!checkout && (
+            <button
+              className="btn btn-sm btn-outline-secondary me-2"
+              onClick={handleDecrease}
+              disabled={quantity <= 1}
+            >
+              -
+            </button>
+          )}
+          <span className="px-2">{quantity}</span>
+          {!checkout && (
+            <button
+              className="btn btn-sm btn-outline-secondary ms-2"
+              onClick={handleIncrease}
+              disabled={quantity >= product.stock}
+            >
+              +
+            </button>
+          )}
+        </div>
       </div>
       <div className="ms-3 text-end">
         <p className="mb-0 fw-semibold">${(price * quantity).toLocaleString()}</p>
